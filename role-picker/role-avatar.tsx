@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import styles from "./styles.module.scss";
 
-export default function RoleAvatar({ name, onClick, isActive }: any) {
+const RoleAvatar = ({ name, onClick, isActive }: any, re) => {
   return (
     <li
       onClick={onClick}
@@ -29,3 +29,5 @@ export default function RoleAvatar({ name, onClick, isActive }: any) {
     </li>
   );
 }
+
+export default RoleAvatar
