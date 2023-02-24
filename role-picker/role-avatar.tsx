@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import styles from "./styles.module.scss";
 
-const RoleAvatar = ({ name, onClick, isActive }: any, re) => {
+const RoleAvatar = ({ name, onClick, isActive }: any) => {
   return (
     <li
       onClick={onClick}
