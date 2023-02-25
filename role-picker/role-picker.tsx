@@ -23,6 +23,7 @@ export default function RolePicker() {
         const deltaX =
           e instanceof TouchEvent ? e.touches[0].clientX - startX : e.movementX;
         e instanceof TouchEvent && setStartX(e.touches[0].clientX);
+
         const conWidth = conRef.current.clientWidth;
         const width = domRef.current.scrollWidth;
         const newLeft =
@@ -83,14 +84,12 @@ export default function RolePicker() {
     const conWidth = conRef.current.clientWidth;
     const width = domRef.current.scrollWidth;
 
-    const liWidth = (width - 16) / len;
+    const liWidth = (width - 3 * 16 - 16) / len;
     const liActiveWidth = liWidth + 16;
 
     const halfConWidth = conWidth / 2;
-    const leftWidth = liWidth * activeIndex + liActiveWidth / 2;
-    const rightWidth = liWidth * (len - 1 - activeIndex) + liActiveWidth / 2;
-
-    // console.log(activeIndex, liWidth, leftWidth, halfConWidth);
+    const leftWidth = liWidth * activeIndex + liActiveWidth / 2 + 3 * 16;
+    const rightWidth = liWidth * (len - 1 - activeIndex) + liActiveWidth / 2 + 3 * 16;
 
     if (leftWidth >= halfConWidth && rightWidth >= halfConWidth) {
       setLeft(halfConWidth - leftWidth);
@@ -114,39 +113,48 @@ export default function RolePicker() {
     setActive(index);
   }
 
-  useEffect(() => {
-    const springWobbly = (t: number) => -0.5 * (2.71828 ** (-6 * t)) * (
-      -2 * (2.71828 ** (6 * t)) + Math.sin(12 * t) + 2 * Math.cos(12 * t))
+  // Spring
+  // useEffect(() => {
+  //   const springWobbly = (t: number) => -0.5 * (2.71828 ** (-6 * t)) * (
+  //     -2 * (2.71828 ** (6 * t)) + Math.sin(12 * t) + 2 * Math.cos(12 * t))
 
-    const lerp = (a: number, b: number, p: number) => a + p * (b - a)
-    let str = ""
-    for (let i = 0; i < 117; i++) {
-      let p = springWobbly(i / 100)
-      str += `${i - 17}% { transform: translateX(${lerp(100, 0, p)}px)}`
-    }
-    console.log(str)
-  }, [])
+  //   const lerp = (a: number, b: number, p: number) => a + p * (b - a)
+  //   let str = ""
+  //   for (let i = 0; i < 117; i++) {
+  //     let p = springWobbly(i / 100)
+  //     str += `${i - 17}% { transform: translateX(${lerp(16, 0, p)}px)}`
+  //   }
+  //   console.log(str)
+  // }, [])
 
   return (
-    <div tabIndex={0} className={styles["roles-container"]}>
-      <div className={styles["left-mask"]}>
-        <div className={styles["right-mask"]} ref={conRef}>
-          <ul
-            className={classNames(
-              styles["source-item-wrap"],
-              !moveFlag && styles["transition"]
-            )}
-            ref={domRef}
-          >
-            {rolesList.concat(rolesList).map((role, index) => (
-              <RoleAvatar
-                key={index}
-                name={role}
-                isActive={index === activeIndex}
-                onClick={() => toggle(index)}
-              />
-            ))}
-          </ul>
+    <div className={styles["main"]}>
+      <div tabIndex={0} className={styles["roles-container"]}>
+        <div className={styles["left-arrow"]} onClick={() => keyCallback({ code: "ArrowLeft" } as KeyboardEvent)}>
+          <div className={styles["arrow-icon-left"]}></div>
+        </div>
+        <div className={styles["right-arrow"]} onClick={() => keyCallback({ code: "ArrowRight" } as KeyboardEvent)}>
+          <div className={styles["arrow-icon-right"]}></div>
+        </div>
+        <div className={styles["left-mask"]}>
+          <div className={styles["right-mask"]} ref={conRef}>
+            <ul
+              className={classNames(
+                styles["source-item-wrap"],
+                !moveFlag && styles["transition"]
+              )}
+              ref={domRef}
+            >
+              {rolesList.concat(rolesList).map((role, index) => (
+                <RoleAvatar
+                  key={index}
+                  name={role}
+                  isActive={index === activeIndex}
+                  onClick={() => toggle(index)}
+                />
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>

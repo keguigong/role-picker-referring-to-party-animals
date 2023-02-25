@@ -1,10 +1,20 @@
+.main {
+  max-width: 1024px;
+  margin: 0 auto;
+  min-height: calc(100vh - 2 * 8px);
+  align-items: center;
+  display: flex;
+}
+
 .roles-container {
+  flex: 1;
   position: relative;
   background: #f6bc58;
   background-repeat: no-repeat;
   background-size: 100%;
+  align-items: center;
   overflow: hidden;
-  padding: 0 2rem;
+  padding: 0 3rem;
   &:focus {
     outline: none;
   }
@@ -13,6 +23,52 @@
 @mixin disable-drag-select {
   -webkit-user-drag: none;
   user-select: none;
+}
+
+.left-arrow,
+.right-arrow {
+  @include disable-drag-select();
+  position: absolute;
+  width: 5rem;
+  height: 100%;
+  left: 0rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.left-arrow {
+  .arrow-icon-left {
+    height: 34px;
+    width: 22px;
+    rotate: 180deg;
+    transition: background 0.2s ease-in;
+    background: url(../public/party-animals/arror.svg) no-repeat;
+  }
+
+  &:hover {
+    .arrow-icon-left {
+      background: url(../public/party-animals/arror_hover.svg) no-repeat;
+    }
+  }
+}
+
+.right-arrow {
+  left: auto;
+  right: 0rem;
+
+  .arrow-icon-right {
+    height: 34px;
+    width: 22px;
+    transition: background 0.2s ease-in;
+    background: url(../public/party-animals/arror.svg) no-repeat;
+  }
+
+  &:hover {
+    .arrow-icon-right {
+      background: url(../public/party-animals/arror_hover.svg) no-repeat;
+    }
+  }
 }
 
 @mixin mask-transition {
@@ -60,6 +116,14 @@
     margin 0.15s ease-in;
   transform-origin: center;
 
+  &:first-of-type {
+    margin: 0 0.5rem 0 3rem;
+  }
+
+  &:last-of-type {
+    margin: 0 3rem 0 0.5rem;
+  }
+
   &.active {
     scale: 1.2;
     margin: 0 1rem;
@@ -68,6 +132,14 @@
       display: block;
       transform: scale(1.08);
     }
+  }
+
+  &:first-of-type.active {
+    margin: 0 1rem 0 3.5rem;
+  }
+
+  &:last-of-type.active {
+    margin: 0 3.5rem 0 1rem;
   }
 
   &:hover {
@@ -105,7 +177,7 @@
   position: relative;
   width: 100%;
   vertical-align: top;
-  transition: filter 0.07s ease-in-out;
+  transition: filter 0.1s ease-in-out;
   &:active {
     filter: brightness(96%);
   }
