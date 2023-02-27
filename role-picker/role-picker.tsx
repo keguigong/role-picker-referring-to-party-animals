@@ -16,6 +16,8 @@ export default function RolePicker() {
   const [activeIndex, setActive] = useState(0);
   const [arrowLeft, setArrowLeft] = useState(-1);
 
+  const [startTime, setTime] = useState(Date.now());
+
   // Mouse events
   const slideCallback = useCallback(
     (e: MouseEvent | TouchEvent) => {
@@ -40,7 +42,7 @@ export default function RolePicker() {
   );
 
   useEffect(() => {
-    const mousedown = () => setFlag(true);
+    const mousedown = () => (setFlag(true), setTime(Date.now()));
     const mouseup = () => setFlag(false);
     const block = domRef.current;
     block?.addEventListener("mousedown", mousedown);
@@ -48,7 +50,7 @@ export default function RolePicker() {
     window.addEventListener("mouseup", mouseup);
 
     const touchstart = (e: TouchEvent) => (
-      setFlag(true), setStartX(e.touches[0].clientX)
+      setFlag(true), setStartX(e.touches[0].clientX), setTime(Date.now())
     );
     const touchend = (e: TouchEvent) => setFlag(true);
     block?.addEventListener("touchstart", touchstart);
@@ -89,7 +91,8 @@ export default function RolePicker() {
 
     const halfConWidth = conWidth / 2;
     const leftWidth = liWidth * activeIndex + liActiveWidth / 2 + 3 * 16;
-    const rightWidth = liWidth * (len - 1 - activeIndex) + liActiveWidth / 2 + 3 * 16;
+    const rightWidth =
+      liWidth * (len - 1 - activeIndex) + liActiveWidth / 2 + 3 * 16;
 
     if (leftWidth >= halfConWidth && rightWidth >= halfConWidth) {
       setLeft(halfConWidth - leftWidth);
@@ -110,6 +113,7 @@ export default function RolePicker() {
   }, [keyCallback]);
 
   function toggle(index: number) {
+    if (Date.now() - startTime >= 100) return;
     setActive(index);
   }
 
@@ -130,10 +134,16 @@ export default function RolePicker() {
   return (
     <div className={styles["main"]}>
       <div tabIndex={0} className={styles["roles-container"]}>
-        <div className={styles["left-arrow"]} onClick={() => keyCallback({ code: "ArrowLeft" } as KeyboardEvent)}>
+        <div
+          className={styles["left-arrow"]}
+          onClick={() => keyCallback({ code: "ArrowLeft" } as KeyboardEvent)}
+        >
           <div className={styles["arrow-icon-left"]}></div>
         </div>
-        <div className={styles["right-arrow"]} onClick={() => keyCallback({ code: "ArrowRight" } as KeyboardEvent)}>
+        <div
+          className={styles["right-arrow"]}
+          onClick={() => keyCallback({ code: "ArrowRight" } as KeyboardEvent)}
+        >
           <div className={styles["arrow-icon-right"]}></div>
         </div>
         <div className={styles["left-mask"]}>
